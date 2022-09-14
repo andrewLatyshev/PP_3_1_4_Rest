@@ -6,41 +6,55 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User implements UserDetails  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
+    @Column(name = "name")
     private String name;
+    @Column(name = "surname")
     private String surname;
-    private byte age;
+    @Column(name = "age")
+    private Byte age;
+    @Column(name = "password")
+    private String password;
+
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "name"))
 
-//    private Collection<Role> roles;
+    private Collection<Role> roles;
 
-    private Set<Role> roles = new HashSet<>();
+    public User() {
+    }
+
+    public User(String name, String surname, Byte age, String password, Collection<Role> roles) {
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+        this.password = password;
+        this.roles = roles;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return roles;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.name;
     }
 
     @Override

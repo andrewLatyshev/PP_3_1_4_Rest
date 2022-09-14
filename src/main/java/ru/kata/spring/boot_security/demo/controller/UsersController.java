@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,19 +9,28 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
 import java.util.List;
 
 @Controller
+@RequestMapping("/authenticate")
 public class UsersController {
 
-	private final UserService userService;
+	private UserService userService;
+	private RoleService roleService;
 
-	public UsersController(UserService userService) {
+	@Autowired
+	public void usersController(UserService userService) {
 		this.userService = userService;
+	}
+
+	public void setRoleService(RoleService roleService) {
+		this.roleService = roleService;
 	}
 	@GetMapping( value = "/")
 	public String showAllUsers(Model model) {
@@ -32,7 +42,6 @@ public class UsersController {
 	@GetMapping("/authenticate")
 	public String authenticationPage(Principal principal) {
 		User user = userService.showUserByName(principal.getName());
-		Authentication a = SecurityContextHolder.getContext().getAuthentication();
 		return "secured-page" + user.getUsername() + " " + user.getSurname();
 	}
 

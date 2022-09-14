@@ -6,6 +6,7 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
+import java.util.HashSet;
 
 @Repository
 public class RoleDaoImpl implements RoleDao{
@@ -22,7 +23,7 @@ public class RoleDaoImpl implements RoleDao{
 
     @Override
     public Collection<Role> getAll() {
-        return entityManager.createQuery("SELECT user FROM Role user", Role.class).getResultList();
+        return new HashSet<>(entityManager.createQuery("SELECT role FROM Role role", Role.class).getResultList());
     }
 
     @Override
