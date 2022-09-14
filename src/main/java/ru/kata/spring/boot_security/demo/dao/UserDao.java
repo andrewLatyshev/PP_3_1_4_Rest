@@ -15,4 +15,6 @@ public interface UserDao {
     void editUser(int id, User user);
 
     User showUser(int id);
+
+    User showUserByName(String name);
 }

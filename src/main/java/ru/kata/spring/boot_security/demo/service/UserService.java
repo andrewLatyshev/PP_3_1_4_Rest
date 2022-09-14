@@ -15,4 +15,6 @@ public interface UserService {
     void editUser(int id, User user);
 
     User showUser(int id);
+
+    public User showUserByName(String name);
 }

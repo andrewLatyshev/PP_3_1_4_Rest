@@ -42,4 +42,9 @@ public class UserDaoIml implements UserDao {
     public User showUser(int id) {
         return entityManager.find(User.class, id);
     }
+
+    @Override
+    public User showUserByName(String name) {
+        return entityManager.find(User.class, name);
+    }
 }
