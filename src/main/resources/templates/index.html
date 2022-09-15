@@ -1,40 +1,13 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>User List</title>
+    <meta charset="UTF-8">
+    <title>SpringSecurity</title>
 </head>
 <body>
-<div th:switch="${users}">
-    <h2 th:case="null"> No users Found!</h2>
-    <div th:case="*">
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Surname</th>
-                <th>Age</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${users}">
-                <td th:text="${user.id}"></td>
-                <td th:text="${user.name}"></td>
-                <td th:text="${user.surname}"></td>
-                <td th:text="${user.age}"></td>
-                <td><a th:href="@{user-update/{id}(id=${user.id})}">Edit</a> </td>
-                <td><a th:href="@{user-delete/{id}(id=${user.id})}">Delete</a></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <p><a href="/user-create"> Create user</a> </p>
-</div>
+This is Homepage
+
+Please click the button below and Login
+<h2><p><a href="/login"> Login</a> </p></h2>
 </body>
 </html>
-
-
-
-
-
