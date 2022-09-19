@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.net.Inet4Address;
+import java.util.Arrays;
 
 @Entity
 @Data
@@ -25,9 +26,7 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return "Role{" +
-                "name='" + name + '\'' +
-                '}';
+        return name;
     }
 
     @Override

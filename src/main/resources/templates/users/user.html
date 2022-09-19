@@ -3,23 +3,24 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>This is your page</title>
+    <title>User</title>
 </head>
 <body>
+<h2> This is your page </h2>
 <table>
     <tr>
         <th>ID</th>
         <th>Name</th>
         <th>Surname</th>
         <th>Age</th>
-        <th>Roles</th>
+        <th>Role</th>
     </tr>
     <tr>
         <td><p th:text="${user.getId()}">VALUE</p></td>
         <td><p th:text="${user.getUsername()}">VALUE</p></td>
         <td><p th:text="${user.getSurname()}">VALUE</p></td>
         <td><p th:text="${user.getAge()}">VALUE</p></td>
-        <td><p th:text="${user.getAuthorities()}">VALUE</p></td>
+        <td><p th:text="${user.getRoles()}">VALUE</p></td>
     <tr>
 </table>
 

@@ -32,7 +32,7 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    	@GetMapping( path = "/list")
+    	@GetMapping
 	public String showAllUsers(Model model) {
 		List<User> users = userService.getAllUsers();
 		model.addAttribute("users", users);
@@ -52,26 +52,28 @@ public class AdminController {
     }
 
     @PostMapping("/user-create")
-    public String createUser(User user) {
+    public String createUser(User user, Model model) {
+        model.addAttribute("role", roleService.getAll());
         userService.saveUser(user);
-        return "redirect:/admin/list";
+        return "redirect:/admin";
     }
 
-    @GetMapping("user-delete/{id}")
+    @GetMapping("/user_delete/{id}")
     public String removeById(@PathVariable("id") Long id) {
         userService.removeUserById(id);
-        return "redirect:/admin/list";
+        return "redirect:/admin";
     }
 
-    @GetMapping("user-update/{id}")
+    @GetMapping("/user-update/{id}")
     public String updateUserForm(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.showUser(id));
+        model.addAttribute("role", roleService.getAll());
         return "admin/user-update";
     }
 
     @PostMapping("/user-update")
     public String updateUser(int id, User user) {
         userService.editUser(id, user);
-        return "redirect:/admin/list";
+        return "redirect:/admin";
     }
 }

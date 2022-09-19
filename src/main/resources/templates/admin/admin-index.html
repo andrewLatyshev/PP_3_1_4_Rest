@@ -23,8 +23,9 @@
                 <td th:text="${user.name}"></td>
                 <td th:text="${user.surname}"></td>
                 <td th:text="${user.age}"></td>
-                <td><a th:href="@{user-update/{id}(id=${user.id})}">Edit</a> </td>
-                <td><a th:href="@{user-delete/{id}(id=${user.id})}">Delete</a></td>
+                <td><a th:href="@{/admin/user-update/{id}(id=${user.id})}">Edit</a> </td>
+                <td><a th:href="@{/admin/user_delete/{id}(id=${user.id})}">Delete</a></td>
+                <td><a th:href="@{/admin/user/{id}(id=${user.id})}">Inspect user's page</a></td>
             </tr>
             </tbody>
         </table>
