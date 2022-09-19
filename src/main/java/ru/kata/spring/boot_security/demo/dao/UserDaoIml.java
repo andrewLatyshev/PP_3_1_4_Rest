@@ -29,7 +29,7 @@ public class UserDaoIml implements UserDao {
     }
 
     @Override
-    public void removeUserById(int id) {
+    public void removeUserById(Long id) {
         entityManager.remove(showUser(id));
     }
 
@@ -39,7 +39,7 @@ public class UserDaoIml implements UserDao {
     }
 
     @Override
-    public User showUser(int id) {
+    public User showUser(Long id) {
         return entityManager.find(User.class, id);
     }
 

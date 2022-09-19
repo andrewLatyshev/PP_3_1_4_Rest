@@ -6,8 +6,23 @@
     <title>This is your page</title>
 </head>
 <body>
-<p th:text="${user.name}"></p>
-<p th:text="${user.surname}"></p>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Age</th>
+        <th>Roles</th>
+    </tr>
+    <tr>
+        <td><p th:text="${user.getId()}">VALUE</p></td>
+        <td><p th:text="${user.getUsername()}">VALUE</p></td>
+        <td><p th:text="${user.getSurname()}">VALUE</p></td>
+        <td><p th:text="${user.getAge()}">VALUE</p></td>
+        <td><p th:text="${user.getAuthorities()}">VALUE</p></td>
+    <tr>
+</table>
+
 
     <form class="form-signin" method="get" action="/logout">
         <button class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>

@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.configs;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -15,14 +16,21 @@ import java.util.Set;
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
     // Spring Security использует объект Authentication, пользователя авторизованной сессии.
     private UserService userService;
+
+    @Autowired
+    public SuccessUserHandler(UserService userService) {
+        this.userService = userService;
+    }
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
                                         HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         if (roles.contains("USER")) {
-            httpServletResponse.sendRedirect("/users");
+            Long id = userService.showUserByName(authentication.getName()).getId();
+            httpServletResponse.sendRedirect("/users" + "/" + id);
         } else if (roles.contains("ADMIN")){
-            httpServletResponse.sendRedirect("/admin");
+            httpServletResponse.sendRedirect("/admin/list");
         } else {
             httpServletResponse.sendRedirect("/");
         }
