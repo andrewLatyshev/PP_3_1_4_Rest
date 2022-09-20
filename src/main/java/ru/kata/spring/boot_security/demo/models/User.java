@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Set;
 
 @Data
 @Entity
@@ -28,12 +29,12 @@ public class User implements UserDetails  {
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Collection<Role> roles;
+    private Set<Role> roles;
 
     public User() {
     }
 
-    public User(String name, String surname, Byte age, String password, Collection<Role> roles) {
+    public User(String name, String surname, Byte age, String password, Set<Role> roles) {
         this.name = name;
         this.surname = surname;
         this.age = age;
@@ -41,9 +42,12 @@ public class User implements UserDetails  {
         this.roles = roles;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return getRoles();
     }
 
     @Override

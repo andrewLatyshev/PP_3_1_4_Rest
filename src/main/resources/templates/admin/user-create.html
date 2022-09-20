@@ -16,11 +16,25 @@
   <input type="text" th:field="*{age}" id="age" placeholder="Age">
   <label for="password">Password</label>
   <input type="text" th:field="*{password}" id="password" placeholder="Password">
-  <label for="role">SetRole</label>
-  <input type="text" th:field="*{role}" id="role" placeholder="Role">
+  <br/>
   <input type="submit" value="Create user">
+</form>
 
+<form>
+  <p>
+  <label>
+    <input type="checkbox" name="role" th:value="ADMIN">
+    Make an Admin
+  </label>
+  </p>
+</form>
 
+<form th:action="@{/admin}">
+  <button type="submit">Back</button>
+</form>
+
+<form class="form-signin" method="get" action="/logout">
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
 </form>
 </body>
 </html>

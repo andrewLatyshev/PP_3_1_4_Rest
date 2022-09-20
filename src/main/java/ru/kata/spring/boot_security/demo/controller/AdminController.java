@@ -4,22 +4,22 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-    UserService userService;
-    RoleService roleService;
+    private UserService userService;
+    private RoleService roleService;
 
     @Autowired
     public AdminController(UserService userService, RoleService roleService) {
@@ -46,17 +46,38 @@ public class AdminController {
         return "/users/user";
     }
 
+
     @GetMapping("/user-create")
     public String createUserForm(User user) {
         return "admin/user-create";
     }
 
+    @GetMapping("/user-create")
+    public String createUserForm(User user, @RequestParam() String role,  Model model) {
+
+        model.addAttribute("role", roleService.getRoleByName(role));
+        return "admin/user-create";
+    }
+
     @PostMapping("/user-create")
-    public String createUser(User user, Model model) {
-        model.addAttribute("role", roleService.getAll());
+    public String createUser(User user) {
         userService.saveUser(user);
         return "redirect:/admin";
+//    }
+
+
+//    @PostMapping("/user-create")
+//    public String add(@ModelAttribute("userInfo") User user, @RequestParam("rolesSelected") Long[] roles){
+//        Set<Role> roleSet = new HashSet<>();
+//        for (Long s : roles) {
+//            roleSet.add(roleService.getById(s));
+//        }
+//        user.setRoles(roleSet);
+//        userService.saveUser(user);
+//        return "redirect:/admin";
     }
+
+
 
     @GetMapping("/user_delete/{id}")
     public String removeById(@PathVariable("id") Long id) {
