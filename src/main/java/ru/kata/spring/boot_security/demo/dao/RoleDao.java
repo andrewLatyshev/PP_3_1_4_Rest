@@ -15,4 +15,5 @@ public interface RoleDao {
     Role getById(Long id);
 
     Role getRoleByName(String input_role);
+
 }
