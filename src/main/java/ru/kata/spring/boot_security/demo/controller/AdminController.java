@@ -11,6 +11,7 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -68,14 +69,15 @@ public class AdminController {
 
     @PostMapping("/user-create" )
     public String postUser(@ModelAttribute("user") User user,
-                           @RequestParam(value = "role", required=false) String role) {
+                           @RequestParam(value = "role", required=false) String  role) {
         Set<Role> roles = new HashSet<>();
 
+        roles.add(roleService.getRoleByName("USER"));
         if (role != null && role.equals("ADMIN")) {
             roles.add(roleService.getRoleByName(role));
         }
-        roles.add(roleService.getRoleByName("USER"));
 //        user.setRoles(roles);
+        System.out.println(roles);
         user.setRoles(roles);
         userService.saveUser(user);
 
