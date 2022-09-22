@@ -21,7 +21,7 @@ import java.util.Set;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private UserService userService;
+    private final UserService userService;
     private RoleService roleService;
 
     @Autowired
@@ -89,10 +89,6 @@ public class AdminController {
         roles.add(roleService.getRoleByName("USER"));
         if (!roles.contains(roleService.getRoleByName(role))) {
             roles.add(roleService.getRoleByName(role));
-        }
-        if (role.equals("TAKERIGHTS")) {
-//            roles.stream().
-//            roles.add(roleService.getRoleByName("USER"));
         }
         System.out.println(roles);
         user.setRoles(roles);
