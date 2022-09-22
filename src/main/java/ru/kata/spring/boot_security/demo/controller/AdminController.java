@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,68 +49,25 @@ public class AdminController {
         return "/users/user";
     }
 
-
-//    @GetMapping("/user-create")
-//    public String createUserForm(User user) {
-//        return "admin/user-create";
-//    }
-//
-//
-//    @PostMapping("/user-create")
-//    public String createUser(User user){
-//        userService.saveUser(user);
-//        return "redirect:/admin";
-//    }
-
     @GetMapping("/user-create")
-    public String addUser(Model model) {
+    public String createUserForm(Model model) {
         model.addAttribute("user", new User());
         return "admin/user-create";
     }
 
     @PostMapping("/user-create" )
-    public String postUser(@ModelAttribute("user") User user,
+    public String createUser(@ModelAttribute("user") User user,
                            @RequestParam(value = "role", required=false) String  role) {
         Set<Role> roles = new HashSet<>();
-
         roles.add(roleService.getRoleByName("USER"));
         if (role != null && role.equals("ADMIN")) {
             roles.add(roleService.getRoleByName(role));
         }
-//        user.setRoles(roles);
-        System.out.println(roles);
         user.setRoles(roles);
         userService.saveUser(user);
 
         return "redirect:/admin";
     }
-
-
-
-//    @GetMapping(value = "/user-create")
-//    public String addUser(Model model,
-//                          @ModelAttribute("user") User user,
-//                          @ModelAttribute("role") Role role) {
-//        model.addAttribute("allRoles", roleService.getAll());
-//        return "admin/user-create";
-//    }
-//
-//    @PostMapping(value = "/user-create")
-//    public String postAddUser(@ModelAttribute("user") User user,
-//                              @RequestParam("rolesSelected") Long[] rolesId,
-//                              BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return "admin/user-create";
-//        }
-//        HashSet<Role> roles = new HashSet<>();
-//        for (Long roleId : rolesId) {
-//            roles.add(roleService.getById(roleId));
-//        }
-//        user.setRoles(roles);
-//        userService.saveUser(user);
-//        return "redirect:/admin";
-//    }
-
 
     @GetMapping("/user_delete/{id}")
     public String removeById(@PathVariable("id") Long id) {
@@ -117,16 +75,27 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-
     @GetMapping("/user-update/{id}")
     public String updateUserForm(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.showUser(id));
-        model.addAttribute("role", roleService.getAll());
         return "admin/user-update";
     }
 
     @PostMapping("/user-update")
-    public String updateUser(int id, User user) {
+    public String updateUser(Long id, @ModelAttribute("user") User user,
+                             @RequestParam(value = "role", required=false) String  role) {
+        Set<Role> roles;
+        roles = userService.showUser(id).getRoles();
+        roles.add(roleService.getRoleByName("USER"));
+        if (!roles.contains(roleService.getRoleByName(role))) {
+            roles.add(roleService.getRoleByName(role));
+        }
+        if (role.equals("TAKERIGHTS")) {
+//            roles.stream().
+//            roles.add(roleService.getRoleByName("USER"));
+        }
+        System.out.println(roles);
+        user.setRoles(roles);
         userService.editUser(id, user);
         return "redirect:/admin";
     }

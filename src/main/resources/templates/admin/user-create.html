@@ -20,25 +20,28 @@
   <input type="text" th:field="*{password}" id="password" placeholder="Password">
   <br/>
   <input type="submit" value="Create user">
+  <form>
+    <p>
+      <label>
+        <input type="checkbox" th:name="role" th:value="ADMIN">
+        Make an Admin
+      </label>
+    </p>
+  </form>
+
 </form>
 
-<form>
-  <p>
-  <label>
-    <input type="checkbox" th:name="role" th:value="ADMIN">
-    Make an Admin
-  </label>
-  </p>
+<form th:action="@{/admin}">
+  <button type="submit">Back</button>
 </form>
-
-<form th:action="@{/}">
-  <button type="submit" th:name="action" th:value="in">check-in</button>
-  <button type="submit" th:name="action" th:value="out">check-out</button>
-</form>
-
+<!--<form th:action="@{/}">-->
+<!--  <button type="submit" th:name="action" th:value="in">check-in</button>-->
+<!--  <button type="submit" th:name="action" th:value="out">check-out</button>-->
+<!--</form>-->
 <form class="form-signin" method="get" action="/logout">
   <button class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
 </form>
+
 </body>
 </html>
 
