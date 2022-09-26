@@ -2,17 +2,14 @@ package ru.kata.spring.boot_security.demo.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -89,6 +86,9 @@ public class AdminController {
         roles.add(roleService.getRoleByName("USER"));
         if (!roles.contains(roleService.getRoleByName(role))) {
             roles.add(roleService.getRoleByName(role));
+        } else if (roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("USER")) {
+            roles.clear();
+            roles.add(roleService.getRoleByName("USER"));
         }
         System.out.println(roles);
         user.setRoles(roles);
