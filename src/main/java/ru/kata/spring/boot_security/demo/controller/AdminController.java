@@ -75,6 +75,7 @@ public class AdminController {
     @GetMapping("/user-update/{id}")
     public String updateUserForm(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.showUser(id));
+        model.addAttribute("role", roleService.getAll());
         return "admin/user-update";
     }
 

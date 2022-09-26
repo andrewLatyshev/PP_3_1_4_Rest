@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>SpringSecurity</title>
@@ -9,11 +10,6 @@ This is Homepage
 
 Please click the button below and Login
 <h2><p><a href="/login"> Login</a> </p></h2>
-
-<form th:action="@{/users/{id}}" >
-    <p><a href="">To my page</a></p>
-</form>
-
 
 <p><a href="/admin"> For Admins</a> </p>
 
