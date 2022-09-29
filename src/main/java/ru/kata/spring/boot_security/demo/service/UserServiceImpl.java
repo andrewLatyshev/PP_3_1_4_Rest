@@ -26,7 +26,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private UserDao userDao;
     private RoleService roleService;
 
-
     @Autowired
     public void setPasswordEncoder() {
     }
@@ -50,16 +49,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public void saveUser(User user, String role) {
         Set<Role> roles = new HashSet<>();
-//        roles = userDao.showUserByName(user.getName()).getRoles();
         roles.add(roleService.getRoleByName("USER"));
-        if (!roles.contains(roleService.getRoleByName(role))) {
+        if (role != null && role.equals("ADMIN")) {
             roles.add(roleService.getRoleByName(role));
-        } else if (roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("USER")) {
-            roles.clear();
-            roles.add(roleService.getRoleByName("USER"));
         }
-
-
+        user.setRoles(roles);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.saveUser(user);
@@ -73,7 +67,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void editUser(Long id, User user) {
+    public void editUser(Long id, User user, String role) {
+        Set<Role> roles;
+        roles = userDao.showUserByName(user.getName()).getRoles();
+        if (!roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("ADMIN")) {
+            roles.add(roleService.getRoleByName(role));
+        } else if (role.equals("")) {
+            roles = userDao.showUserByName(user.getName()).getRoles();
+        } else if (roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("USER")) {
+            roles.clear();
+            roles.add(roleService.getRoleByName("USER"));
+        }
+        user.setRoles(roles);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.editUser(id, user);
     }
 

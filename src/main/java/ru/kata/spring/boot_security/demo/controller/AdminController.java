@@ -55,14 +55,7 @@ public class AdminController {
     @PostMapping("/user-create" )
     public String createUser(@ModelAttribute("user") User user,
                            @RequestParam(value = "role", required=false) String role) {
-//        Set<Role> roles = new HashSet<>();
-//        roles.add(roleService.getRoleByName("USER"));
-//        if (role != null && role.equals("ADMIN")) {
-//            roles.add(roleService.getRoleByName(role));
-//        }
-//        user.setRoles(roles);
         userService.saveUser(user, role);
-
         return "redirect:/admin";
     }
 
@@ -82,18 +75,7 @@ public class AdminController {
     @PostMapping("/user-update")
     public String updateUser(Long id, @ModelAttribute("user") User user,
                              @RequestParam(value = "role", required=false) String  role) {
-        Set<Role> roles = new HashSet<>();
-//        roles = userService.showUser(id).getRoles();
-//        roles.add(roleService.getRoleByName("USER"));
-//        if (!roles.contains(roleService.getRoleByName(role))) {
-//            roles.add(roleService.getRoleByName(role));
-//        } else if (roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("USER")) {
-//            roles.clear();
-//            roles.add(roleService.getRoleByName("USER"));
-//        }
-        System.out.println(roles);
-        user.setRoles(roles);
-        userService.editUser(id, user);
+        userService.editUser(id, user, role);
         return "redirect:/admin";
     }
 }
