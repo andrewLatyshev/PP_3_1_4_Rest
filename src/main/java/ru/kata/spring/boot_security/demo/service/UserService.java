@@ -8,7 +8,7 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    void saveUser(User user);
+    void saveUser(User user, String role);
 
     void removeUserById(Long id);
 

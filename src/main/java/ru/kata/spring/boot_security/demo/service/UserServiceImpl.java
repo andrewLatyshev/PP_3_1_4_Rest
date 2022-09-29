@@ -15,13 +15,16 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private UserDao userDao;
+    private RoleService roleService;
 
 
     @Autowired
@@ -30,9 +33,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, RoleService roleService) {
         this.userDao = userDao;
-//        this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
     }
 
     public UserServiceImpl() {
@@ -45,7 +48,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void saveUser(User user) {
+    public void saveUser(User user, String role) {
+        Set<Role> roles = new HashSet<>();
+//        roles = userDao.showUserByName(user.getName()).getRoles();
+        roles.add(roleService.getRoleByName("USER"));
+        if (!roles.contains(roleService.getRoleByName(role))) {
+            roles.add(roleService.getRoleByName(role));
+        } else if (roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("USER")) {
+            roles.clear();
+            roles.add(roleService.getRoleByName("USER"));
+        }
+
+
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.saveUser(user);
