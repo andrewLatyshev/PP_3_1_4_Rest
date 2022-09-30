@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
@@ -14,25 +15,30 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private UserDao userDao;
-    private BCryptPasswordEncoder passwordEncoder;
+    private RoleService roleService;
 
     @Autowired
     public void setPasswordEncoder() {
-        this.passwordEncoder = passwordEncoder;
     }
+
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, RoleService roleService) {
         this.userDao = userDao;
+        this.roleService = roleService;
     }
 
+    public UserServiceImpl() {
+    }
 
     @Override
     public List<User> getAllUsers() {
@@ -41,11 +47,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void saveUser(User user) {
+    public void saveUser(User user, String role) {
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleService.getRoleByName("USER"));
+        if (role != null && role.equals("ADMIN")) {
+            roles.add(roleService.getRoleByName(role));
+        }
+        user.setRoles(roles);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.saveUser(user);
     }
 
-      @Override
+    @Override
     @Transactional
     public void removeUserById(Long id) {
         userDao.removeUserById(id);
@@ -53,7 +67,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void editUser(Long id, User user) {
+    public void editUser(Long id, User user, String role) {
+        Set<Role> roles;
+        roles = userDao.showUserByName(user.getName()).getRoles();
+        if (!roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("ADMIN")) {
+            roles.add(roleService.getRoleByName(role));
+        } else if (role.equals("")) {
+            roles = userDao.showUserByName(user.getName()).getRoles();
+        } else if (roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("USER")) {
+            roles.clear();
+            roles.add(roleService.getRoleByName("USER"));
+        }
+        user.setRoles(roles);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.editUser(id, user);
     }
 
