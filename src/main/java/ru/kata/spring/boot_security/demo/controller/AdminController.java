@@ -32,12 +32,12 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    	@GetMapping
-	public String showAllUsers(Model model) {
-		List<User> users = userService.getAllUsers();
-		model.addAttribute("users", users);
-		return "admin/admin-index";
-	}
+    @GetMapping
+    public String showAllUsers(Model model) {
+        List<User> users = userService.getAllUsers();
+        model.addAttribute("users", users);
+        return "admin/admin-index";
+    }
 
 
     @GetMapping(path = "user/{id}")
@@ -52,9 +52,9 @@ public class AdminController {
         return "admin/user-create";
     }
 
-    @PostMapping("/user-create" )
+    @PostMapping("/user-create")
     public String createUser(@ModelAttribute("user") User user,
-                           @RequestParam(value = "role", required=false) String role) {
+                             @RequestParam(value = "role", required = false) String role) {
         userService.saveUser(user, role);
         return "redirect:/admin";
     }
@@ -68,13 +68,12 @@ public class AdminController {
     @GetMapping("/user-update/{id}")
     public String updateUserForm(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.showUser(id));
-        model.addAttribute("role", roleService.getAll());
         return "admin/user-update";
     }
 
     @PostMapping("/user-update")
     public String updateUser(Long id, @ModelAttribute("user") User user,
-                             @RequestParam(value = "role", required=false) String  role) {
+                             @RequestParam(value = "role", required = false) String role) {
         userService.editUser(id, user, role);
         return "redirect:/admin";
     }

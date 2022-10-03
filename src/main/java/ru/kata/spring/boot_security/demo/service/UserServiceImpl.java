@@ -27,11 +27,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private RoleService roleService;
 
     @Autowired
-    public void setPasswordEncoder() {
-    }
-
-
-    @Autowired
     public UserServiceImpl(UserDao userDao, RoleService roleService) {
         this.userDao = userDao;
         this.roleService = roleService;
@@ -54,12 +49,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             roles.add(roleService.getRoleByName(role));
         }
         user.setRoles(roles);
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.saveUser(user);
     }
 
-      @Override
+    @Override
     @Transactional
     public void removeUserById(Long id) {
         userDao.removeUserById(id);
@@ -79,8 +74,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             roles.add(roleService.getRoleByName("USER"));
         }
         user.setRoles(roles);
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User changePass = userDao.showUser(user.getId());
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        if (changePass.getPassword().equals(user.getPassword())) {
+            user.setPassword(user.getPassword());
+        } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         userDao.editUser(id, user);
     }
 

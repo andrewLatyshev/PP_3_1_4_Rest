@@ -17,4 +17,5 @@ public interface UserDao {
     User showUser(Long id);
 
     User showUserByName(String name);
+
 }

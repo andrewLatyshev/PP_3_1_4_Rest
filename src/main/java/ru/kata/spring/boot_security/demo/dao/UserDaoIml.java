@@ -47,4 +47,6 @@ public class UserDaoIml implements UserDao {
     public User showUserByName(String name) {
         return entityManager.createQuery("SELECT u from User u where u.name = :name", User.class).setParameter("name", name).getSingleResult();
     }
+
+
 }
