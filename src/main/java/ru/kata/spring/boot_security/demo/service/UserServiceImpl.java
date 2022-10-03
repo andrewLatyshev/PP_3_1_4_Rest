@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             roles.add(roleService.getRoleByName(role));
         }
         user.setRoles(roles);
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.saveUser(user);
     }
@@ -67,7 +67,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void editUser(Long id, User user, String role) {
+    public void editUser(User user, String role) {
+        System.out.println(role);
         Set<Role> roles;
         roles = userDao.showUserByName(user.getName()).getRoles();
         if (!roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("ADMIN")) {
@@ -79,9 +80,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             roles.add(roleService.getRoleByName("USER"));
         }
         user.setRoles(roles);
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userDao.editUser(id, user);
+        User changePass = userDao.showUser(user.getId());
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        if (changePass.getPassword().equals(user.getPassword())) {
+            user.setPassword(user.getPassword());
+        } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        userDao.editUser(user);
     }
 
     @Override

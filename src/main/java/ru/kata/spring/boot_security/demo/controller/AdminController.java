@@ -63,19 +63,17 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @PostMapping("/user-update/{id}")
-    public String updateUserForm(@PathVariable("id") Long id, Model model, @ModelAttribute("user") User user,
-                                 @RequestParam(value = "role", required=false) String  role) {
-        model.addAttribute("user", userService.showUser(id));
-        model.addAttribute("role", roleService.getAll());
-        userService.editUser(id, user, role);
-        return "redirect:/admin";
-    }
-
-//    @PatchMapping(path = "/user-update")
-//    public String updateUser(Long id, @ModelAttribute("user") User user,
-//                             @RequestParam(name = "role", required=false) String  role) {
-//        userService.editUser(id, user, role);
+//    @PostMapping(value = "/user-update/{id}")
+//    public String updateUserForm(@PathVariable("id") Long id, Model model, @ModelAttribute("user") User user,
+//                                 @RequestParam(value = "role", required=false) String  role) {
+//        userService.editUser(user, role);
 //        return "redirect:/admin";
 //    }
+
+    @PostMapping(path = "/user-update/{id}")
+    public String updateUser(@ModelAttribute("user") User user,
+                             @RequestParam(name = "role", required=false) String  role) {
+        userService.editUser(user, role);
+        return "redirect:/admin";
+    }
 }
