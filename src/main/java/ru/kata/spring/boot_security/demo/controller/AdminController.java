@@ -38,17 +38,11 @@ public class AdminController {
 	}
 
 
-    @GetMapping(path = "user/{id}")
+    @GetMapping(path = "{id}")
     public String showUser(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.showUser(id));
-        return "user";
+        return "admin/user";
     }
-
-//    @GetMapping("/user-create")
-//    public String createUserForm(Model model) {
-//        model.addAttribute("user", new User());
-//        return "admin/user-create";
-//    }
 
     @PostMapping("/user_create" )
     public String createUser(@ModelAttribute("user") User user,
