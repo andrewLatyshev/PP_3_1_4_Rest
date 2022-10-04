@@ -5,14 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
@@ -33,28 +30,29 @@ public class AdminController {
     }
 
     @GetMapping
-    public String showAllUsers(Model model) {
-        List<User> users = userService.getAllUsers();
-        model.addAttribute("users", users);
-        return "admin/admin-index";
-    }
+	public String showAllUsers(Model model, Principal principal) {
+		model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("roles", roleService.getAll());
+        model.addAttribute("user", userService.showUserByName(principal.getName()));
+		return "/admin/adminPage";
+	}
 
 
     @GetMapping(path = "user/{id}")
     public String showUser(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.showUser(id));
-        return "/users/user";
+        return "user";
     }
 
-    @GetMapping("/user-create")
-    public String createUserForm(Model model) {
-        model.addAttribute("user", new User());
-        return "admin/user-create";
-    }
+//    @GetMapping("/user-create")
+//    public String createUserForm(Model model) {
+//        model.addAttribute("user", new User());
+//        return "admin/user-create";
+//    }
 
-    @PostMapping("/user-create")
+    @PostMapping("/user_create" )
     public String createUser(@ModelAttribute("user") User user,
-                             @RequestParam(value = "role", required = false) String role) {
+                           @RequestParam(value = "role", required=false) String role) {
         userService.saveUser(user, role);
         return "redirect:/admin";
     }
@@ -65,16 +63,13 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/user-update/{id}")
-    public String updateUserForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.showUser(id));
-        return "admin/user-update";
-    }
-
-    @PostMapping("/user-update")
-    public String updateUser(Long id, @ModelAttribute("user") User user,
-                             @RequestParam(value = "role", required = false) String role) {
-        userService.editUser(id, user, role);
+    @PostMapping(value = "/user-update/{id}")
+    public String updateUserForm(@ModelAttribute("user") User user, @PathVariable("id")
+                                 @RequestParam(value = "role", required=false) String  role) {
+        if (role == null) {
+            return "redirect:/admin";
+        }
+        userService.editUser(user, role);
         return "redirect:/admin";
     }
 }

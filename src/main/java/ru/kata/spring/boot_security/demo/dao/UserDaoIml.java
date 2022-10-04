@@ -34,7 +34,7 @@ public class UserDaoIml implements UserDao {
     }
 
     @Override
-    public void editUser(Long id, User user) {
+    public void editUser(User user) {
         entityManager.merge(user);
     }
 

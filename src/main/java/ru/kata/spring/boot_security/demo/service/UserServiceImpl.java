@@ -27,6 +27,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private RoleService roleService;
 
     @Autowired
+    public void setPasswordEncoder() {
+    }
+
+
+    @Autowired
     public UserServiceImpl(UserDao userDao, RoleService roleService) {
         this.userDao = userDao;
         this.roleService = roleService;
@@ -62,13 +67,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void editUser(Long id, User user, String role) {
+    public void editUser(User user, String role) {
         Set<Role> roles;
         roles = userDao.showUserByName(user.getName()).getRoles();
-        if (!roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("ADMIN")) {
+       /* if (role == null) {
+            roles.add(roleService.getRoleByName("GUEST"));
+        } else*/ if (!roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("ADMIN")) {
             roles.add(roleService.getRoleByName(role));
-        } else if (role.equals("")) {
-            roles = userDao.showUserByName(user.getName()).getRoles();
         } else if (roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("USER")) {
             roles.clear();
             roles.add(roleService.getRoleByName("USER"));
@@ -82,7 +87,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        userDao.editUser(id, user);
+        userDao.editUser(user);
     }
 
     @Override
