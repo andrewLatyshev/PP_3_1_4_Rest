@@ -63,16 +63,12 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-//    @PostMapping(value = "/user-update/{id}")
-//    public String updateUserForm(@PathVariable("id") Long id, Model model, @ModelAttribute("user") User user,
-//                                 @RequestParam(value = "role", required=false) String  role) {
-//        userService.editUser(user, role);
-//        return "redirect:/admin";
-//    }
-
-    @PostMapping(path = "/user-update/{id}")
-    public String updateUser(@ModelAttribute("user") User user,
-                             @RequestParam(name = "role", required=false) String  role) {
+    @PostMapping(value = "/user-update/{id}")
+    public String updateUserForm(@ModelAttribute("user") User user, @PathVariable("id")
+                                 @RequestParam(value = "role", required=false) String  role) {
+        if (role == null) {
+            return "redirect:/admin";
+        }
         userService.editUser(user, role);
         return "redirect:/admin";
     }

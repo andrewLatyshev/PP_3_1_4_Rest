@@ -24,12 +24,12 @@ public class UsersController {
 	@GetMapping("/{id}")
 	public String showUser(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("user", userService.showUser(id));
-		return "/user";
+		return "users/user";
 	}
 
 	@GetMapping("/user")
 	public String toUserPage(Principal principal, Model model) {
 		model.addAttribute("user", userService.showUserByName(principal.getName()));
-		return "/user";
+		return "users/user";
 	}
 }

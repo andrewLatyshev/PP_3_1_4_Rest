@@ -68,13 +68,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void editUser(User user, String role) {
-        System.out.println(role);
         Set<Role> roles;
         roles = userDao.showUserByName(user.getName()).getRoles();
-        if (!roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("ADMIN")) {
+       /* if (role == null) {
+            roles.add(roleService.getRoleByName("GUEST"));
+        } else*/ if (!roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("ADMIN")) {
             roles.add(roleService.getRoleByName(role));
-        } else if (role.equals("")) {
-            roles = userDao.showUserByName(user.getName()).getRoles();
         } else if (roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("USER")) {
             roles.clear();
             roles.add(roleService.getRoleByName("USER"));
