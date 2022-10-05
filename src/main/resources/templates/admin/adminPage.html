@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -51,11 +51,11 @@
 
                 </ul>
             </div>
-
+<!--adminpanel-->
             <div class="col-md-10 bg-light" style="padding-top: 20px; height: 100vh">
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="admin">
-                        <h2 class="h2">Admin</h2>
+                        <h2 class="h2">Admin panel</h2>
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#UsersTable">Users table</a>
@@ -96,7 +96,7 @@
                                                        data-target="#modalEdit"
                                                        th:attrappend="data-target=${user.getId()}"
                                                     >Edit</a>
-
+<!--update-user-->
                                                     <div class="modal fade" id="modalEdit"
                                                          th:attrappend="id=${user.getId()}" tabindex="-1" role="dialog"
                                                          aria-labelledby="TitleModalLabel" aria-hidden="true">
@@ -135,7 +135,7 @@
                                                                                 <label class="font-weight-bold text-align-top text-align-center"
                                                                                        th:for="age">Age</label>
                                                                                 </br>
-                                                                                <input type="text" name="age"
+                                                                                <input type="number" name="age"
                                                                                        th:id="age"
                                                                                        th:value="${user.getAge()}">
                                                                             </div>
@@ -153,10 +153,8 @@
                                                                                        th:for="roles.name">Roles</label>
                                                                                 <select class="form-control" size="2"
                                                                                         th:name="role">
-                                                                                    <option th:utext="User"
-                                                                                            th:value="USER"></option>
-                                                                                    <option th:utext="Admin"
-                                                                                            th:value="ADMIN"></option>
+                                                                                    <option th:utext="User" th:value="USER"></option>
+                                                                                    <option th:utext="Admin" th:value="ADMIN"></option>
                                                                                 </select>
                                                                             </div>
                                                                             </br>
@@ -171,7 +169,7 @@
 
                                                 </td>
                                                 <td>
-
+<!--delete-user-->
                                                     <a class="btn btn-danger" role="button" data-toggle="modal"
                                                        data-target="#modalDelete"
                                                        th:attrappend="data-target=${user.getId()}"
@@ -228,7 +226,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="button" class="btn btn cancel"
+                                                                        <button type="button" class="btn btn-secondary"
                                                                                 data-dismiss="modal">Close
                                                                         </button>
                                                                         <button type="submit" class="btn btn-danger">
@@ -269,7 +267,7 @@
                                                     <label class="font-weight-bold text-align-top text-align-center"
                                                            th:for="age">Age</label>
                                                     </br>
-                                                    <input type="text" name="age" th:id="age">
+                                                    <input type="number" name="age" th:id="age">
                                                 </div>
                                                 <div class="col-md-12 mb-6">
                                                     <label class="font-weight-bold text-align-top text-align-center"

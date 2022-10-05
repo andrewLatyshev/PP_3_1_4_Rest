@@ -30,6 +30,6 @@ public class UsersController {
 	@GetMapping("/user")
 	public String toUserPage(Principal principal, Model model) {
 		model.addAttribute("user", userService.showUserByName(principal.getName()));
-		return "admin/user";
+		return "users/user";
 	}
 }

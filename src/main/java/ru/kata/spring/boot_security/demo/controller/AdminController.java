@@ -38,9 +38,9 @@ public class AdminController {
 	}
 
 
-    @GetMapping(path = "{id}")
-    public String showUser(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.showUser(id));
+    @GetMapping("/user")
+    public String toAdminPage(Principal principal, Model model) {
+        model.addAttribute("user", userService.showUserByName(principal.getName()));
         return "admin/user";
     }
 
