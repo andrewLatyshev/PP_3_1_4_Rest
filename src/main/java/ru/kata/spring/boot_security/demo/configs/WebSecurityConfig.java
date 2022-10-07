@@ -19,20 +19,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userService;
 
 
+
     @Autowired
     public WebSecurityConfig(SuccessUserHandler successUserHandler, UserDetailsService userService) {
         this.successUserHandler = successUserHandler;
         this.userService = userService;
     }
 
-    @Autowired
-
-    public void setUserService(UserDetailsService userService) {
-        this.userService = userService;
-    }
-    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
-        this.successUserHandler = successUserHandler;
-    }
+//    @Autowired
+//
+//    public void setUserService(UserDetailsService userService) {
+//        this.userService = userService;
+//    }
+//    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
+//        this.successUserHandler = successUserHandler;
+//    }
     @Bean
     public PasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
