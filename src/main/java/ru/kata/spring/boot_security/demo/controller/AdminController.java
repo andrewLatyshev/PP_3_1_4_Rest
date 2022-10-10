@@ -15,27 +15,27 @@ import java.security.Principal;
 @RequestMapping("/admin")
 public class AdminController {
 
-//    private final UserService userService;
-//    private RoleService roleService;
-//
-//    @Autowired
-//    public AdminController(UserService userService, RoleService roleService) {
-//        this.userService = userService;
-//        this.roleService = roleService;
-//    }
-//
-//    @Autowired
-//    public void setRoleService(RoleService roleService) {
-//        this.roleService = roleService;
-//    }
-//
-//    @GetMapping
-//	public String showAllUsers(Model model, Principal principal) {
-//		model.addAttribute("users", userService.getAllUsers());
-//        model.addAttribute("roles", roleService.getAll());
-//        model.addAttribute("user", userService.showUserByName(principal.getName()));
-//		return "/admin/adminPage";
-//	}
+    private final UserService userService;
+    private RoleService roleService;
+
+    @Autowired
+    public AdminController(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
+    }
+
+    @Autowired
+    public void setRoleService(RoleService roleService) {
+        this.roleService = roleService;
+    }
+
+    @GetMapping
+	public String showAllUsers(Model model, Principal principal) {
+		model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("roles", roleService.getAll());
+        model.addAttribute("user", userService.showUserByName(principal.getName()));
+		return "/admin/adminPage";
+	}
 //
 //
 //    @GetMapping("/user")

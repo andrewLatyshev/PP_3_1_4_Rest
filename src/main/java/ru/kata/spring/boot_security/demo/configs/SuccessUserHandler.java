@@ -30,7 +30,7 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
             Long id = userService.showUserByName(authentication.getName()).getId();
             httpServletResponse.sendRedirect("/users/user");
         } else if (roles.contains("ADMIN")){
-            httpServletResponse.sendRedirect("/admin");
+            httpServletResponse.sendRedirect("/api/v1/admin");
         } else {
             httpServletResponse.sendRedirect("/");
         }

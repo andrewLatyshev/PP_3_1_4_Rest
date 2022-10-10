@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,14 +26,14 @@ public class AdminRestController {
 
     private RoleService roleService;
 
-//    @Autowired
-//    public AdminRestController(UserService userService, RoleService roleService) {
-//        this.userService = userService;
-//        this.roleService = roleService;
-//    }
+    @Autowired
+    public AdminRestController(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
+    }
 
 
-    @GetMapping(value = "/allusers", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<User>> showAllUsers() {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<>(userService.getAllUsers(), responseHeaders, HttpStatus.OK);
