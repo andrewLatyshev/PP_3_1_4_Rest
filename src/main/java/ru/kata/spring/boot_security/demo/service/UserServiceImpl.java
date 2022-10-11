@@ -47,12 +47,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void saveUser(User user, String role) {
+    public void saveUser(User user) {
         Set<Role> roles = new HashSet<>();
         roles.add(roleService.getRoleByName("USER"));
-        if (role != null && role.equals("ADMIN")) {
-            roles.add(roleService.getRoleByName(role));
-        }
+//        if (role != null && role.equals("ADMIN")) {
+//            roles.add(roleService.getRoleByName(role));
+//        }
         user.setRoles(roles);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));

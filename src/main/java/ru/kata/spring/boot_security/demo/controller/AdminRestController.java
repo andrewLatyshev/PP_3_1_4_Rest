@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
@@ -15,7 +16,6 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/admin")
@@ -33,29 +33,22 @@ public class AdminRestController {
     }
 
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public ResponseEntity<List<User>> showAllUsers() {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<>(userService.getAllUsers(), responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
-    @GetMapping("/roles")
-    public ResponseEntity<Set<Role>> showAllRoles() {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        Set<Role> roles = (Set<Role>) roleService.getAll();
-        return new ResponseEntity<>(roles, responseHeaders, HttpStatus.OK);
-    }
 
 
     @PostMapping("/create")
-    public ResponseEntity<User> createUser(@RequestBody User user, String role) {
-        userService.saveUser(user, role);
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        userService.saveUser(user);
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<>(user, responseHeaders, HttpStatus.CREATED);
     }
 
 
-    @GetMapping(value = "user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "form/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> showUserById(@PathVariable Long id) {
         try {
             User user = userService.showUser(id);
@@ -68,15 +61,27 @@ public class AdminRestController {
     @DeleteMapping("delete/{id}")
     public ResponseEntity<User> delete(@PathVariable Long id) {
         userService.removeUserById(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Void> update(@RequestBody User user, String role) {
+//        userService.editUser(user, role);
+        userService.editUser(user, role);
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<>(responseHeaders, HttpStatus.OK);
     }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<User> update(@RequestBody User user, String role) {
-        userService.editUser(user, role);
+    @GetMapping("/roles")
+    public ResponseEntity<Set<Role>> showAllRoles() {
         HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<>(user, responseHeaders, HttpStatus.OK);
+        Set<Role> roles = (Set<Role>) roleService.getAll();
+        return new ResponseEntity<>(roles, responseHeaders, HttpStatus.OK);
     }
+
+//    @GetMapping("/view/User")
+//    public ResponseEntity<User> showUser(Authentication authentication) {
+//        return new ResponseEntity<>((User) authentication.getPrincipal(), HttpStatus.OK);
+//    }
 
 }
