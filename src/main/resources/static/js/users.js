@@ -115,11 +115,19 @@ function loadModal(id, editMode = true) {
                         if (response.ok) {
                             deleteFormId.find('#Roles').empty();
                             response.json().then(roleList => {
-                                roleList.forEach(role => {
-                                    deleteFormId.find('#Roles')
-                                        .append($('<option>')
-                                            .prop('selected', user.roles.filter(e => e.id === role.id).length)
-                                            .val(role.id).text(role.name));
+                                roleList.
+
+
+                                map(role => {
+                                    let flag = user.roles.find(item => item.id === role.id) ? 'selected' : '';
+                                    $('#Roles').append('<option id="' + role.id + '" ' + flag + ' name="' + role.name + '" >' +
+                                        role.name + '</option>')
+
+                                // forEach(role => {
+                                //     deleteFormId.find('#Roles')
+                                //         .append($('<option>')
+                                //             .prop('selected', user.roles.filter(e => e.id === role.id).length)
+                                //             .val(role.id).text(role.name));
                                 });
                             });
                         } else {

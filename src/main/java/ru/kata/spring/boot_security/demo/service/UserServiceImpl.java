@@ -48,12 +48,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public void saveUser(User user) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleService.getRoleByName("USER"));
-//        if (role != null && role.equals("ADMIN")) {
-//            roles.add(roleService.getRoleByName(role));
+//        Set<Role> roles;
+//        roles = user.getRoles();
+//        if (!roles.contains(null) && roles.contains(roleService.getRoleByName("ADMIN"))) {
+//            roles.add(roleService.getRoleByName("ADMIN"));
+//            roles.add(roleService.getRoleByName("USER"));
+//        } else {
+//        roles.add(roleService.getRoleByName("USER"));
 //        }
-        user.setRoles(roles);
+//        user.setRoles(roles);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.saveUser(user);
@@ -67,18 +70,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void editUser(User user, String role) {
-        Set<Role> roles;
-        roles = userDao.showUserByName(user.getName()).getRoles();
-        if (role == null) {
-            roles = userDao.showUserByName(user.getName()).getRoles();
-        } else if (!roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("ADMIN")) {
-            roles.add(roleService.getRoleByName(role));
-        } else if (roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("USER")) {
-            roles.clear();
-            roles.add(roleService.getRoleByName("USER"));
-        }
-        user.setRoles(roles);
+    public void editUser(User user) {
+//        Set<Role> roles;
+//        roles = user.getRoles();
+//        if (roles.contains(roleService.getRoleByName("ADMIN"))) {
+//            roles.add(roleService.getRoleByName("ADMIN"));
+//            roles.add(roleService.getRoleByName("USER"));
+//        } else if (roles.contains(roleService.getRoleByName("USER"))) {
+//            roles.clear();
+//            roles.add(roleService.getRoleByName("USER"));
+//        }
+//        user.setRoles(roles);
         User changePass = userDao.showUser(user.getId());
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
