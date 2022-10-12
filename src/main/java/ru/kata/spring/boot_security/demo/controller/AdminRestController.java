@@ -67,7 +67,6 @@ public class AdminRestController {
 
     @PutMapping("/update")
     public ResponseEntity<User> update(@RequestBody User user) {
-//        userService.editUser(user, role);
         userService.editUser(user);
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<>(user, responseHeaders, HttpStatus.OK);
@@ -79,9 +78,9 @@ public class AdminRestController {
         return new ResponseEntity<>(roles, responseHeaders, HttpStatus.OK);
     }
 
-//    @GetMapping("/view/User")
-//    public ResponseEntity<User> showUser(Authentication authentication) {
-//        return new ResponseEntity<>((User) authentication.getPrincipal(), HttpStatus.OK);
-//    }
+    @GetMapping("/user")
+    public ResponseEntity<User> showUser(Authentication authentication) {
+        return new ResponseEntity<>((User) authentication.getPrincipal(), HttpStatus.OK);
+    }
 
 }

@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
@@ -49,22 +48,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public void saveUser(User user) {
         Set<Role> newRoles = user.getRoles();
-        System.out.println(newRoles);
-
         Set<Role> roles = new HashSet<>();
-
-        if (newRoles.contains(roleService.getRoleByName("ADMIN"))) {
+        if (newRoles.stream().anyMatch(r -> r.getName().equals("ADMIN"))) {
             roles.add(roleService.getRoleByName("ADMIN"));
             roles.add(roleService.getRoleByName("USER"));
         } else {
-            roles.add(roleService.getRoleByName("ADMIN"));
+            roles.add(roleService.getRoleByName("USER"));
         }
         user.setRoles(roles);
-        System.out.println(roles);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        System.out.println(newRoles.getClass());
-
         userDao.saveUser(user);
     }
 
@@ -78,15 +71,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public void editUser(User user) {
         Set<Role> roles;
+        Set<Role> updateRoles = user.getRoles();
         roles = userDao.showUserByName(user.getName()).getRoles();
-//        if (role == null) {
-//            roles = userDao.showUserByName(user.getName()).getRoles();
-//        } else if (!roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("ADMIN")) {
-//            roles.add(roleService.getRoleByName(role));
-//        } else if (roles.contains(roleService.getRoleByName("ADMIN")) && role.equals("USER")) {
-//            roles.clear();
-//            roles.add(roleService.getRoleByName("USER"));
-//        }
+        if (updateRoles.contains(null)) {
+            roles = userDao.showUserByName(user.getName()).getRoles();
+        } else if (updateRoles.stream().anyMatch(r -> r.getName().equals("ADMIN"))) {
+            roles.add(roleService.getRoleByName("ADMIN"));
+        } else if (updateRoles.stream().noneMatch(r -> r.getName().equals("ADMIN"))) {
+            roles.clear();
+            roles.add(roleService.getRoleByName("USER"));
+        }
         user.setRoles(roles);
         User changePass = userDao.showUser(user.getId());
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

@@ -41,17 +41,15 @@
                         height: 100vh">
 
                 <ul class="nav nav-pills flex-column">
-
+                    <div sec:authorize="hasAuthority('ADMIN')">
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="/admin">Admin</a>
+                        </li>
+                    </div>
                     <div sec:authorize="hasAuthority('USER')">
                         <li class="nav-item">
                             <a class="nav-link active"
                                href="/user">User</a>
-                        </li>
-                    </div>
-
-                    <div sec:authorize="hasAuthority('ADMIN')">
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="/admin">Admin</a>
                         </li>
                     </div>
                 </ul>
