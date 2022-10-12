@@ -66,11 +66,11 @@ public class AdminRestController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Void> update(@RequestBody User user, String role) {
+    public ResponseEntity<User> update(@RequestBody User user) {
 //        userService.editUser(user, role);
-        userService.editUser(user, role);
+        userService.editUser(user);
         HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<>(responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(user, responseHeaders, HttpStatus.OK);
     }
     @GetMapping("/roles")
     public ResponseEntity<Set<Role>> showAllRoles() {

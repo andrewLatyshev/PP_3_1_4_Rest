@@ -78,13 +78,13 @@ function loadModal(id, editMode = true) {
 
     fetch('/api/v1/admin/form/' + id, {method: 'GET'})
         .then(function (response) {
-                if (response.status !== 200) {
-                    console.error('Looks like there was a problem. Status Code: ' + response.status);
-                    if (response.status === 400) {
-                        response.text().then((value) => console.warn("Error message: " + value));
-                    }
-                    return;
-                }
+                // if (response.status !== 200) {
+                //     console.error('Looks like there was a problem. Status Code: ' + response.status);
+                //     if (response.status === 400) {
+                //         response.text().then((value) => console.warn("Error message: " + value));
+                //     }
+                //     return;
+                // }
                 response.json().then(function (user) {
 
                     deleteFormId.find('#id').val(user.id);
@@ -118,16 +118,16 @@ function loadModal(id, editMode = true) {
                                 roleList.
 
 
-                                map(role => {
-                                    let flag = user.roles.find(item => item.id === role.id) ? 'selected' : '';
-                                    $('#Roles').append('<option id="' + role.id + '" ' + flag + ' name="' + role.name + '" >' +
-                                        role.name + '</option>')
+                                // map(role => {
+                                //     let flag = user.roles.find(item => item.id === role.id) ? 'selected' : '';
+                                //     $('#Roles').append('<option id="' + role.id + '" ' + flag + ' name="' + role.name + '" >' +
+                                //         role.name + '</option>')
 
-                                // forEach(role => {
-                                //     deleteFormId.find('#Roles')
-                                //         .append($('<option>')
-                                //             .prop('selected', user.roles.filter(e => e.id === role.id).length)
-                                //             .val(role.id).text(role.name));
+                                forEach(role => {
+                                    deleteFormId.find('#Roles')
+                                        .append($('<option>')
+                                            .prop('selected', user.roles.filter(e => e.id === role.id).length)
+                                            .val(role.name).text(role.name));
                                 });
                             });
                         } else {
@@ -237,7 +237,7 @@ $('#newUserLink').click(() => {
                 roleList.forEach(role => {
                     userAddFormId.find('#newRoles')
                         .append($('<option>')
-                            .val(role.id).text(role.name));
+                            .val(role.name).text(role.name));
                 });
             });
         } else {
